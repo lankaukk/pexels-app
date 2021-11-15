@@ -2,13 +2,13 @@
 
 Pexels Browser is a website to let users browse photos from Pexels! Visitors are greeted with a selection of curated photos and are able to search our extensive catalog of quality photos from professional photographers. ✨📸✨
 
-To get this React app started, first run `npm i && npm start`
+To get this React app started, first fork and clone this repo, then run `npm i && npm start`
 
 ![ Pexels Browser Inferface](pexels-browser.gif)  [](pexels-browser.gif)
 
 You will need to create your wn API Key to access the Pexels API. Creating a key is free and only requires an account. Get started here: https://www.pexels.com/onboarding Once you've got your key, you can paste it in place of the API_KEY variable at the top of the PicListContainer.js file.
 
-### The Components
+### Info about the React Components
 
 #### `<App/>`
 
