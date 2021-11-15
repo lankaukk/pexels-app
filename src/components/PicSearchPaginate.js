@@ -12,35 +12,37 @@ class PicSearchPaginate extends Component {
         if (this.state.query === "" || false) {
             this.props.fetchCurated(this.state.pageIndex)
         } else {
-            this.props.fetchPICs(this.state.query, this.state.pageIndex)
+            this.props.fetchSearched(this.state.query, this.state.pageIndex)
             
         }
     }
 
     incrementPage = () => {
         if (this.state.pageIndex < 8) {
+            document.getElementById('leftarrow').style.display = 'block';
             let newIndex = this.state.pageIndex + 1
             this.setState({
                 pageIndex: newIndex
-            })
-            //console.log(this.state.index)
+            }) }
+        else if (this.state.pageIndex == 8) {
+            document.getElementById('rightarrow').style.display = 'none';
+            console.log("no more pages");
         }
     }
 
     decrementPage = () => {
         if (this.state.pageIndex > 1) {
+            document.getElementById('rightarrow').style.display = 'block';
             let newIndex = this.state.pageIndex - 1
             this.setState({
                 pageIndex: newIndex
-            })
+            }) }
+        else if (this.state.pageIndex == 1 || 2) {
+            document.getElementById('leftarrow').style.display = 'none';
+            console.log("no previous pages");
+            
         }
     }
-
-    renderResults(){
-        if(this.state.query === "" || false)
-           return <center><p>Displaying Pexel's Curated Photo Selecton</p></center>;
-        return <center><p>Showing results for: {this.state.query}</p></center>;
-     }
 
   render() {
     return (
@@ -53,24 +55,21 @@ class PicSearchPaginate extends Component {
             })}
             />
         </form>
-        
-        <br></br>
-        {/* {this.renderResults()} */}
 
         <br></br>
 
-        <center><form 
-                    className="pageNumber"
-                    onSubmit={this.handleSubmit}>
+        <center><form className="pageNumber" onSubmit={this.handleSubmit}>
+
                 <button onClick={this.decrementPage}> 
-                    <p className="arrow left"></p>
+                    <p className="arrow left" id="leftarrow"></p>
                 </button>
 
                     <p className="pageIndex">{ this.state.pageIndex }</p>
 
                 <button onClick={this.incrementPage}>
-                    <p className="arrow right"></p>
+                    <p className="arrow right" id="rightarrow"></p>
                 </button>
+
         </form></center>
 
         <br></br>

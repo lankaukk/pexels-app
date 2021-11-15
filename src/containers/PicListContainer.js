@@ -2,73 +2,78 @@ import React, { Component } from 'react';
 import PicList from '../components/PicList';
 import PicSearchPaginate from '../components/PicSearchPaginate';
 
-const API_KEY = "563492ad6f9170000100000101d30fe3cde6484f8767eda7a28ba586"
+// personal api key from .env file securely without sharing to github
+const API_KEY = process.env.REACT_APP_API_KEY
 
 class PicListContainer extends Component {
 
-  state = {
-    pics: []
-  }
+    state = {
+        pics: []
+    }
 
-  render() {
-    return(
-      <div>
+    fetchSearched = (query, index) => { 
+          const BASE_URL = `https://api.pexels.com/v1/search?query=${query}&page=${index}&per_page=10`
 
-        <PicSearchPaginate fetchPICs={this.fetchPICs} fetchCurated={this.fetchCurated}/>
+          fetch(BASE_URL, {
+          headers: {
+            Authorization: API_KEY
+          }})
+          .then(response => response.json())
+          // .then(result => console.log(result.photos))
+          .then(result => {
 
-        <PicList pics={this.state.pics} />
-        
-      </div>
-    )
-  }
+            this.setState({ 
+              pics: result.photos.map( pic => ({ 
+                url: pic.src.original, 
+                photographer: pic.photographer, 
+                photographer_url: pic.photographer_url}) )
+            });
 
-  fetchPICs = (query, index) => { 
-      fetch(`https://api.pexels.com/v1/search?query=${query}&page=${index}&per_page=10`, {
-      headers: {
-        Authorization: API_KEY
-      }})
-      .then(response => response.json())
-      // .then(result => console.log(result.photos))
-      .then(result => {
-        
-        this.setState({ 
-          pics: result.photos.map( pic => ({ 
-            url: pic.src.original, 
-            photographer: pic.photographer, 
-            photographer_url: pic.photographer_url}) )
-        });
-        
-      })
-      .catch(err => console.log(err))
-      
-    // )
-    console.log("query:", query, "page:", index)
-  }
+          })
+          .catch(err => console.log(err))
 
-  fetchCurated = (index = 1) => { 
-      fetch(`https://api.pexels.com/v1/curated?&page=${index}&per_page=10`, {
-      headers: {
-        Authorization: API_KEY
-      }})
-      .then(response => response.json())
-      .then(result => {
-        this.setState({ 
-          pics: result.photos.map( pic => ({ 
-            url: pic.src.original, 
-            photographer: pic.photographer, 
-            photographer_url: pic.photographer_url}) )
-        });
-      })
-      .catch(err => console.log(err))
-      console.log("curatedquery", "page:", index)
-    
-  }
+        // )
+        console.log("query:", query, "page:", index)
+    }
 
-  componentDidMount() {
-    // good lifecycle method to set up fetch() bc it is an async function
-    // load the curated images by default
-    this.fetchCurated()
-  }
+    fetchCurated = (index = 1) => { 
+          const BASE_URL = `https://api.pexels.com/v1/curated?&page=${index}&per_page=10`
+
+          fetch(BASE_URL, {
+          headers: {
+            Authorization: API_KEY
+          }})
+          .then(response => response.json())
+          .then(result => {
+            this.setState({ 
+              pics: result.photos.map( pic => ({ 
+                url: pic.src.original, 
+                photographer: pic.photographer, 
+                photographer_url: pic.photographer_url}) )
+            });
+          })
+          .catch(err => console.log(err))
+          console.log("curatedquery", "page:", index)
+
+    }
+
+    componentDidMount() {
+        // load the curated images by default
+        this.fetchCurated()
+    }
+
+    render() {
+        return ( 
+        <div>
+            <PicSearchPaginate 
+                fetchSearched = { this.fetchSearched }
+                fetchCurated = { this.fetchCurated }/> 
+
+            <PicList pics = { this.state.pics }/>  
+        </div>
+        )
+    }
+
 }
 
 
