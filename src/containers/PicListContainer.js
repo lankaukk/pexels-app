@@ -37,28 +37,24 @@ class PicListContainer extends Component {
     }
 
     fetchCurated = (index = 1) => { 
-          const BASE_URL = `https://api.pexels.com/v1/curated?&page=${index}&per_page=10`
-
-          fetch(BASE_URL, {
-          headers: {
-            Authorization: API_KEY
-          }})
-          .then(response => response.json())
-          .then(result => {
-            this.setState({ 
-              pics: result.photos.map( pic => ({ 
-                url: pic.src.original, 
-                photographer: pic.photographer, 
-                photographer_url: pic.photographer_url}) )
-            });
-          })
-          .catch(err => console.log(err))
-          console.log("curatedquery", "page:", index)
-
+      const BASE_URL = `https://api.pexels.com/v1/curated?&page=${index}&per_page=10`
+      fetch(BASE_URL, {
+        headers: {
+        Authorization: API_KEY        
+      }})
+      .then(response => response.json())
+      .then(result => {
+        this.setState({ 
+          pics: result.photos.map( pic => ({               
+            url: pic.src.original,                 
+            photographer: pic.photographer, 
+            photographer_url: pic.photographer_url}) )
+          });
+        })
+      .catch(err => console.log(err))
     }
 
     componentDidMount() {
-        // load the curated images by default
         this.fetchCurated()
     }
 
